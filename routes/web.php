@@ -6,11 +6,15 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocsController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TaxController;
 use Illuminate\Support\Facades\Route;
+
+// Public Landing Page
+Route::get('/', [LandingController::class, 'index'])->name('home');
 
 // Guest Authentication
 Route::middleware('guest')->group(function () {
@@ -27,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Dashboard
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Customers (Read for all, Write for Owner)
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
