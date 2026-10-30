@@ -221,7 +221,7 @@
             <section id="section-14" class="space-y-3">
                 <h2 class="text-base font-bold text-[#17211D] border-b border-[#E3E7E4] pb-2">14. Data Export, Backup & Scope Limits</h2>
                 <p>
-                    Reports and ledger data can be exported to standard CSV at any time. For full system backup, administrators can back up the MySQL database and the <code>storage/app/receipts</code> directory.
+                    Reports and financial ledger data can be exported at any time in three formats: <strong>PDF</strong> (publication-ready A4 document), <strong>Microsoft Excel</strong> (native <code>.xlsx</code> workbook with styled headers and typed numerical cells), and <strong>CSV</strong> (lightweight spreadsheet format with automated formula-injection sanitization). For full system backup, administrators can back up the MySQL database and the <code>storage/app/receipts</code> directory.
                 </p>
             </section>
 

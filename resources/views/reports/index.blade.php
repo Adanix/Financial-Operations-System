@@ -99,10 +99,29 @@
                         </button>
                     </form>
 
-                    <a href="{{ route('reports.export', ['tab' => $tab, 'period' => $preset, 'from_date' => $range['from_date'], 'to_date' => $range['to_date']]) }}"
-                       class="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-[#E3E7E4] rounded-xl hover:bg-slate-50 transition-colors">
-                        Export CSV
-                    </a>
+                    <!-- Export Dropdown -->
+                    <div class="relative inline-block text-left" x-data="{ exportOpen: false }">
+                        <button @click="exportOpen = !exportOpen" @click.outside="exportOpen = false" type="button"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-[#E3E7E4] rounded-xl hover:bg-slate-50 transition-colors cursor-pointer">
+                            <span>Export</span>
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div x-show="exportOpen" x-cloak class="absolute right-0 z-20 mt-1 w-44 rounded-xl bg-white border border-[#E3E7E4] shadow-lg py-1 text-xs">
+                            <a href="{{ route('reports.export', ['tab' => $tab, 'format' => 'pdf', 'period' => $preset, 'from_date' => $range['from_date'], 'to_date' => $range['to_date']]) }}"
+                               class="flex items-center px-3.5 py-2 text-slate-700 hover:bg-slate-50 hover:text-[#0F6B57] font-medium">
+                                Export PDF (.pdf)
+                            </a>
+                            <a href="{{ route('reports.export', ['tab' => $tab, 'format' => 'xlsx', 'period' => $preset, 'from_date' => $range['from_date'], 'to_date' => $range['to_date']]) }}"
+                               class="flex items-center px-3.5 py-2 text-slate-700 hover:bg-slate-50 hover:text-[#0F6B57] font-medium">
+                                Export Excel (.xlsx)
+                            </a>
+                            <a href="{{ route('reports.export', ['tab' => $tab, 'format' => 'csv', 'period' => $preset, 'from_date' => $range['from_date'], 'to_date' => $range['to_date']]) }}"
+                               class="flex items-center px-3.5 py-2 text-slate-700 hover:bg-slate-50 hover:text-[#0F6B57] font-medium">
+                                Export CSV (.csv)
+                            </a>
+                        </div>
+                    </div>
+
                     <button onclick="window.print()" type="button" class="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-[#E3E7E4] rounded-xl hover:bg-slate-50 transition-colors cursor-pointer">
                         Print Report
                     </button>
@@ -121,10 +140,29 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <a href="{{ route('reports.export', ['tab' => 'aging', 'as_of_date' => $asOfDate]) }}"
-                       class="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-[#E3E7E4] rounded-xl hover:bg-slate-50 transition-colors">
-                        Export CSV
-                    </a>
+                    <!-- Export Dropdown -->
+                    <div class="relative inline-block text-left" x-data="{ exportOpen: false }">
+                        <button @click="exportOpen = !exportOpen" @click.outside="exportOpen = false" type="button"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-[#E3E7E4] rounded-xl hover:bg-slate-50 transition-colors cursor-pointer">
+                            <span>Export</span>
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div x-show="exportOpen" x-cloak class="absolute right-0 z-20 mt-1 w-44 rounded-xl bg-white border border-[#E3E7E4] shadow-lg py-1 text-xs">
+                            <a href="{{ route('reports.export', ['tab' => 'aging', 'format' => 'pdf', 'as_of_date' => $asOfDate]) }}"
+                               class="flex items-center px-3.5 py-2 text-slate-700 hover:bg-slate-50 hover:text-[#0F6B57] font-medium">
+                                Export PDF (.pdf)
+                            </a>
+                            <a href="{{ route('reports.export', ['tab' => 'aging', 'format' => 'xlsx', 'as_of_date' => $asOfDate]) }}"
+                               class="flex items-center px-3.5 py-2 text-slate-700 hover:bg-slate-50 hover:text-[#0F6B57] font-medium">
+                                Export Excel (.xlsx)
+                            </a>
+                            <a href="{{ route('reports.export', ['tab' => 'aging', 'format' => 'csv', 'as_of_date' => $asOfDate]) }}"
+                               class="flex items-center px-3.5 py-2 text-slate-700 hover:bg-slate-50 hover:text-[#0F6B57] font-medium">
+                                Export CSV (.csv)
+                            </a>
+                        </div>
+                    </div>
+
                     <button onclick="window.print()" type="button" class="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-[#E3E7E4] rounded-xl hover:bg-slate-50 transition-colors cursor-pointer">
                         Print Report
                     </button>
