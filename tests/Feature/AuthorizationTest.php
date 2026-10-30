@@ -55,6 +55,10 @@ class AuthorizationTest extends TestCase
 
     public function test_owner_can_access_and_create_resources(): void
     {
+        $this->actingAs($this->owner)->get(route('customers.create'))->assertStatus(200);
+        $this->actingAs($this->owner)->get(route('invoices.create'))->assertStatus(200);
+        $this->actingAs($this->owner)->get(route('expenses.create'))->assertStatus(200);
+
         $response = $this->actingAs($this->owner)->post(route('customers.store'), [
             'name' => 'New Client Ltd',
             'email' => 'client@test.local',
