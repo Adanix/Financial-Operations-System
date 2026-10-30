@@ -2,8 +2,36 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-brand-bg: #F6F7F5;
+    --color-brand-surface: #FFFFFF;
+    --color-brand-border: #E3E7E4;
+    --color-brand-sidebar: #12201B;
+    --color-brand-sidebar-active: #1C332B;
+    --color-brand-primary: #0F6B57;
+    --color-brand-primary-hover: #0B5546;
+    --color-brand-accent: #10B981;
+    --color-brand-text: #17211D;
+    --color-brand-text-muted: #66736C;
+}
+
+[x-cloak] { display: none !important; }
+
+/* Custom print styles for reports */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    .print-full-width {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 }

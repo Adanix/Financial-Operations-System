@@ -1,7 +1,104 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DocsController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TaxController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+// Guest Authentication
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/demo-login', [AuthController::class, 'demoLogin'])->name('demo.login');
+});
+
+// Documentation (accessible to all)
+Route::get('/docs', [DocsController::class, 'index'])->name('docs');
+
+// Authenticated Application Shell
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Dashboard
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Customers (Read for all, Write for Owner)
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
+
+    Route::middleware('owner')->group(function () {
+        Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
+        Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+        Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
+        Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
+        Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+    });
+
+    // Invoices (Read for all, Write for Owner)
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
+    Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
+    Route::get('/invoices/{invoice}/preview', [InvoiceController::class, 'previewPdf'])->name('invoices.preview');
+
+    Route::middleware('owner')->group(function () {
+        Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
+        Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
+        Route::get('/invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
+        Route::put('/invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
+        Route::delete('/invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
+        Route::post('/invoices/{invoice}/issue', [InvoiceController::class, 'issue'])->name('invoices.issue');
+        Route::post('/invoices/{invoice}/void', [InvoiceController::class, 'void'])->name('invoices.void');
+        Route::post('/invoices/{invoice}/email', [InvoiceController::class, 'email'])->name('invoices.email');
+    });
+
+    // Payments (Read for all, Write for Owner)
+    Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+
+    Route::middleware('owner')->group(function () {
+        Route::post('/invoices/{invoice}/payments', [PaymentController::class, 'store'])->name('payments.store');
+        Route::post('/payments/{payment}/reverse', [PaymentController::class, 'reverse'])->name('payments.reverse');
+    });
+
+    // Expenses (Read for all, Write for Owner)
+    Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
+    Route::get('/expenses/{expense}', [ExpenseController::class, 'show'])->name('expenses.show');
+    Route::get('/expenses/{expense}/receipt', [ExpenseController::class, 'receipt'])->name('expenses.receipt');
+
+    Route::middleware('owner')->group(function () {
+        Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
+        Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+        Route::get('/expenses/{expense}/edit', [ExpenseController::class, 'edit'])->name('expenses.edit');
+        Route::put('/expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.update');
+        Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
+    });
+
+    // Taxes (Read for all, Write for Owner)
+    Route::get('/taxes', [TaxController::class, 'index'])->name('taxes.index');
+
+    Route::middleware('owner')->group(function () {
+        Route::post('/taxes', [TaxController::class, 'store'])->name('taxes.store');
+        Route::put('/taxes/{taxRate}', [TaxController::class, 'update'])->name('taxes.update');
+        Route::patch('/taxes/{taxRate}/default', [TaxController::class, 'setDefault'])->name('taxes.default');
+        Route::patch('/taxes/{taxRate}/status', [TaxController::class, 'toggleStatus'])->name('taxes.status');
+    });
+
+    // Reports (Read for all)
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/export', [ReportController::class, 'export'])->name('reports.export');
+
+    // Settings (Read for all, Write for Owner)
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+
+    Route::middleware('owner')->group(function () {
+        Route::put('/settings/{section}', [SettingController::class, 'update'])->name('settings.update');
+        Route::post('/settings/categories', [SettingController::class, 'storeCategory'])->name('settings.categories.store');
+        Route::patch('/settings/categories/{category}', [SettingController::class, 'updateCategory'])->name('settings.categories.update');
+    });
 });
